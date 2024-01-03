@@ -44,4 +44,8 @@ export const styles = StyleSheet.create({
         marginTop: 36,
         marginBottom: 42,
     },
+    imageEmpty: {
+        width: 257,
+        height: "auto",
+    },
 });

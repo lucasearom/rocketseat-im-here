@@ -1,6 +1,8 @@
+import React, { useState } from "react";
 import {
     Alert,
     FlatList,
+    Image,
     Text,
     TextInput,
     TouchableOpacity,
@@ -11,32 +13,29 @@ import { styles } from "./styles";
 import { Participant } from "../../components/Participant";
 
 export default function Home() {
-    const participants = [
-        "Lucas",
-        "Arthur",
-        "Belinha",
-        "Taylor",
-        "Lana",
-        "Lorde",
-        "Abel",
-        "Mike",
-        "Flor",
-        "Minnie",
-    ];
+    const [participants, setParticipants] = useState<string[]>([]);
+    const [participantName, setParticipantName] = useState("");
+
     function handleParticipantAdd() {
-        if (participants.includes("Lucas")) {
+        if (participants.includes(participantName)) {
             return Alert.alert(
                 "Participante já existente!",
                 "Um participante com esse nome já está na lista, adicione outro!"
             );
         }
+
+        setParticipants((prevState) => [...prevState, participantName]);
+        setParticipantName("");
     }
 
     function handleParticipantRemove(name: string) {
         Alert.alert("Remover", `Remover o participante ${name}?`, [
             {
                 text: "Sim",
-                onPress: () => Alert.alert("Deletado!"),
+                onPress: () =>
+                    setParticipants((prevState) =>
+                        prevState.filter((participant) => participant !== name)
+                    ),
             },
             {
                 text: "Não",
@@ -54,6 +53,8 @@ export default function Home() {
                     style={styles.input}
                     placeholder="Nome do participante"
                     placeholderTextColor="#6B6B6B"
+                    onChangeText={(e) => setParticipantName(e)}
+                    value={participantName}
                 />
                 <TouchableOpacity
                     style={styles.button}
@@ -74,6 +75,12 @@ export default function Home() {
                     />
                 )}
                 showsVerticalScrollIndicator={false}
+                ListEmptyComponent={() => (
+                    <Image
+                        source={require("../../../assets/empty.png")}
+                        style={styles.imageEmpty}
+                    />
+                )}
             />
         </View>
     );
